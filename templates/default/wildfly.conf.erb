@@ -1,0 +1,127 @@
+# changes begin
+
+# KIE Server requires full config
+export SERVER_CONFIG=--server-config=standalone-full.xml
+
+# find this URL via response from http://localhost:8080/kie-server-6.4.0.Final-ee7/services/rest/server/
+export KIE_SERVER_URL=http://localhost:8080/kie-server-6.4.0.Final-ee7/services/rest/server
+export KIE_CONTROLLER_URL=http://localhost:8080/kie-drools-wb-distribution-wars-6.4.0.Final-wildfly8/rest/controller
+
+# id must match name of "server template" created in KWB
+export KIE_SERVER_ID="-Dorg.kie.server.id=wildfly-kieserver"
+
+# user and pwd must match one of the users created with kie-server role
+export KIE_SERVER_USER="-Dorg.kie.server.user=kieserver"
+export KIE_SERVER_PWD="-Dorg.kie.server.pwd=kieserver"
+export KIE_CONTROLLER_USER="-Dorg.kie.server.controller.user=kieserver"
+export KIE_CONTROLLER_PWD="-Dorg.kie.server.controller.pwd=kieserver"
+
+export KIE_SERVER="-Dorg.kie.server.location=$KIE_SERVER_URL"
+export KIE_CONTROLLER="-Dorg.kie.server.controller=$KIE_CONTROLLER_URL"
+
+export DISABLE_BRM="-Dorg.drools.server.ext.disabled=false"
+export DISABLE_BPM="-Dorg.jbpm.server.ext.disabled=true"
+
+# Set kie to ssh_enabled
+export KIE_SSH_ENABLED="-Dorg.uberfire.nio.git.ssh.enabled=true"
+
+# Change location of .niogit directory location to outside /opt/wildfly
+# export NIOGIT="-Dorg.uberfire.nio.git.dir=/data/kie/"
+
+# Change location of kie server state files location to outside /opt/wildfly
+# export SERVER_STATE="-Dorg.kie.server.repo=/data/kie"
+
+# Change location of Lucene .index metadata directory /opt/wildfly
+# export INDEX_METADATA="-Dorg.uberfire.metadata.index.dir=/data/kie"
+
+# Change location of Maven repo directory /opt/wildfly
+# export MAVEN_REPO="-Dorg.guvnor.m2repo.dir=/data/kie"
+
+# Change location of .security directory /opt/wildfly
+# export SECURITY="-Dorg.uberfire.nio.git.ssh.cert.dir=/data/kie"
+
+export JBOSS_OPTS="$SERVER_CONFIG $KIE_SERVER_ID $KIE_SERVER_USER $KIE_SERVER_PWD $KIE_CONTROLLER_USER $KIE_CONTROLLER_PWD $KIE_SERVER $KIE_CONTROLLER $DISABLE_BRM $DISABLE_BPM"
+#$NIOGIT $SERVER_STATE $INDEX_METADATA $MAVEN_REPO $SECURITY
+
+# changes end
+
+# Location of JDK
+#
+<%- if node['wildfly']['java']['enforce_java_home'] === true %>
+    <%- if node['java']['java_home'] && ::File.exists?(node['java']['java_home']) %>
+        JAVA_HOME="<%= node['java']['java_home'] %>"
+    <%- else %>
+        # JAVA_HOME="/usr/lib/jvm/default-java"
+    <%- end %>
+<%- else %>
+    # JAVA_HOME="/usr/lib/jvm/default-java"
+<%- end %>
+
+# Location of WildFly
+#
+<%- if node['wildfly']['base'] && ::File.exists?(node['wildfly']['base']) %>
+    JBOSS_HOME="<%= node['wildfly']['base'] %>"
+<%- else %>
+    # JBOSS_HOME="/opt/wildfly"
+<%- end %>
+
+# The username who should own the process.
+#
+<%- if node['wildfly']['user'] %>
+    JBOSS_USER=<%= node['wildfly']['user'] %>
+<%- else %>
+    # JBOSS_USER=wildfly
+<%- end %>
+
+# The mode WildFly should start, standalone or domain
+
+<%- if node['wildfly']['mode'] %>
+    JBOSS_MODE=<%= node['wildfly']['mode'] %>
+<%- else %>
+    # JBOSS_MODE=standalone
+<%- end %>
+
+# Configuration for standalone mode
+#
+<%- if node['wildfly']['sa']['conf'] %>
+    JBOSS_CONFIG=<%= node['wildfly']['sa']['conf'] %>
+<%- else %>
+    # JBOSS_CONFIG=standalone.xml
+<%- end %>
+
+# Configuration for domain mode
+#
+<%- if node['wildfly']['dom']['conf'] %>
+    JBOSS_DOMAIN_CONFIG=<%= node['wildfly']['dom']['conf'] %>
+<%- else %>
+    # JBOSS_DOMAIN_CONFIG=domain.xml
+<%- end %>
+<%- if node['wildfly']['dom']['host_conf'] %>
+    JBOSS_HOST_CONFIG=<%= node['wildfly']['dom']['host_conf'] %>
+<%- else %>
+    # JBOSS_HOST_CONFIG=host-master.xml
+<%- end %>
+
+# The amount of time to wait for startup
+#
+<%- if node['wildfly']['initd']['startup_wait'] %>
+    STARTUP_WAIT=<%= node['wildfly']['initd']['startup_wait'] %>
+<%- else %>
+    # STARTUP_WAIT=60
+<%- end %>
+
+# The amount of time to wait for shutdown
+#
+<%- if node['wildfly']['initd']['shutdown_wait'] %>
+    SHUTDOWN_WAIT=<%= node['wildfly']['initd']['shutdown_wait'] %>
+<%- else %>
+    # SHUTDOWN_WAIT=60
+<%- end %>
+
+# Location to keep the console log
+#
+<%- if node['wildfly']['log']['console_log'] %>
+    JBOSS_CONSOLE_LOG="<%= node['wildfly']['log']['console_log'] %>"
+<%- else %>
+    # JBOSS_CONSOLE_LOG="/var/log/wildfly/console.log"
+<%- end %>
