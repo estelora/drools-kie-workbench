@@ -1,7 +1,7 @@
 # Drools Kie-Workbench Cookbook
 
 * This is not yet a production-level cookbook, but meant to serve as a reference.
-* If you want to try setting up this server by hand, you can find my playbook [here](https://lejoslin.me/2016/10/26/drools-kie-workbench-playbook-for-centos-6-6/).
+* If you want to try setting up this server by hand, you can find my playbook [here](https://github.com/estelora/kie-drools-playbook/blob/master/kie-workbench-drools-playbook.md).
 
 # Requirements
 * [Wildfly Cookbook](https://github.com/bdwyertech/chef-wildfly)
@@ -12,7 +12,7 @@
 * CentOS, Red Hat
 
 #### Tested on:
-* Centos 6.6
+* CentOS 6.6
 
 ## Usage: 
 * Please add users in attributes/users.rb
