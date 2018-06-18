@@ -3,6 +3,7 @@ maintainer       'Lydia Joslin'
 maintainer_email 'lydiaejoslin@gmail.com'
 description 'Installs/Configures Wildfly and Drools (KIE WB and KIE Server)'
 version '1.0.0'
+license 'MIT license'
 
 depends 'wildfly'
 
